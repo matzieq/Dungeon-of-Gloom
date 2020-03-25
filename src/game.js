@@ -1,16 +1,22 @@
-const MAP_WIDTH = 80;
-const MAP_HEIGHT = 50;
+import { generateBlankMap, generateBoard } from "./map";
+import { drawGame } from "./draw";
+import { update } from "./update";
 
-const dungeonMap = [];
+const dungeonMap = generateBlankMap();
+const player = {
+  glyph: "@",
+  x: 20,
+  y: 20
+};
 
-function generateBoard() {
-  const board = document.getElementById("board");
-  board.innerHTML = "";
-  Array(MAP_HEIGHT)
-    .fill(0)
-    .forEach(() => {
-      board.innerHTML += '<p class="row"></p>';
-    });
-}
+const actors = [player];
 
 generateBoard();
+
+drawGame(dungeonMap, actors);
+
+document.addEventListener("keydown", e => {
+  update(e, player);
+
+  drawGame(dungeonMap, actors);
+});

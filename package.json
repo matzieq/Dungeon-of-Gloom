@@ -1,0 +1,8 @@
+{
+  "name": "js_rl",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/matzieq/Dungeon-of-Gloom.git",
+  "author": "Maciej Kozłowski <mjp.kozlowski@gmail.com>",
+  "license": "MIT"
+}
