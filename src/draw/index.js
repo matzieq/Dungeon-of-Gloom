@@ -1,15 +1,15 @@
-export function drawGame(dungeonMap, actors) {
+export function drawGame({ floor, actors }) {
   const rows = document.querySelectorAll(".row");
 
-  const mapWithActors = [...drawActors(dungeonMap, actors)];
+  const mapWithActors = [...drawActors(floor, actors)];
 
   rows.forEach((row, i) => {
     row.textContent = mapWithActors[i].join("");
   });
 }
 
-export function drawActors(dungeonMap, actors) {
-  const newMap = dungeonMap.map(row => row.map(item => item));
+export function drawActors(floor, actors) {
+  const newMap = floor.map(row => row.map(item => item));
   actors.forEach(actor => {
     const { x, y, glyph } = actor;
 

@@ -2,7 +2,7 @@ import { generateBlankMap, generateBoard } from "./map";
 import { drawGame } from "./draw";
 import { update } from "./update";
 
-const dungeonMap = generateBlankMap();
+const floor = generateBlankMap();
 const player = {
   glyph: "@",
   x: 20,
@@ -11,12 +11,14 @@ const player = {
 
 const actors = [player];
 
+const state = { floor, actors, player };
+
 generateBoard();
 
-drawGame(dungeonMap, actors);
+drawGame(state);
 
 document.addEventListener("keydown", e => {
-  update(e, player);
+  update(e, state);
 
-  drawGame(dungeonMap, actors);
+  drawGame(state);
 });
