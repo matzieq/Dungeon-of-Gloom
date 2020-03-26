@@ -2,7 +2,7 @@ import { generateBlankMap, generateBoard } from './map';
 import { drawGame } from './draw';
 import { update } from './update';
 import { Actor } from './objects/characters';
-import { distanceMap } from './map';
+
 import { MAP_WIDTH, MAP_HEIGHT } from './utils/constants';
 
 const tileSize = window.innerWidth / 80;
@@ -23,8 +23,8 @@ const player = new Actor({
   y: 10
 });
 const monster = new Actor({
-  glyph: 'G',
-  color: '#f00',
+  glyph: 'g',
+  color: '#f80',
   type: 'monster',
   x: 60,
   y: 30
@@ -37,8 +37,6 @@ const state = { floor, actors, player, surface: { canvas, ctx } };
 // generateBoard();
 
 drawGame(state);
-
-console.log(distanceMap({ floor, actor: { pos: { x: 78, y: 38 } } }));
 
 document.addEventListener('keydown', e => {
   update(e, state);

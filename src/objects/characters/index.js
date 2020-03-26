@@ -47,6 +47,8 @@ const getMove = function(distMap) {
     const oldPosDistance = distMap[y][x];
     return newPosDistance < oldPosDistance;
   });
-  console.log(possibleMoves);
+
   return getRandomElement(possibleMoves);
 };
+
+const wait = () => ({ x: 0, y: 0 });
