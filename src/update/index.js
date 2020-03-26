@@ -1,7 +1,9 @@
+import { distanceMap } from "../map";
+
 function moveActor(actor, floor, { x, y }) {
-  if (floor[actor.y + y][actor.x + x] === ".") {
-    actor.x += x;
-    actor.y += y;
+  if (floor[actor.pos.y + y][actor.pos.x + x].flags.walkable) {
+    actor.pos.x += x;
+    actor.pos.y += y;
   }
 }
 

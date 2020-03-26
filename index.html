@@ -22,17 +22,17 @@
         background: #000;
         color: #999;
       }
-
-      .row {
-        font-size: 1.5rem;
-        line-height: 1.1rem;
-        display: inline-block;
+      #canvas {
+        display: block;
+        margin: 0 auto;
       }
     </style>
     <!-- <script src="./src/map/map.js" defer type="module"></script> -->
   </head>
   <body>
-    <div id="board"></div>
+    <div id="board">
+      <canvas id="canvas" width="800" height="500"></canvas>
+    </div>
     <script src="./src/game.js"></script>
   </body>
 </html>
