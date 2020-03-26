@@ -37,10 +37,7 @@ export function update(e, state) {
   moveActor(player, floor, dir);
   actors.forEach(actor => {
     if (actor.ai) {
-      console.log(lineOfSight(player.pos, actor.pos, state));
-      if (distanceBetween(actor.pos, player.pos) < 10) {
-        moveActor(actor, floor, actor.ai(state));
-      }
+      moveActor(actor, floor, actor.ai(state));
     }
   });
 }

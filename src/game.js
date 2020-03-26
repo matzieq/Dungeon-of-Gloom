@@ -1,4 +1,4 @@
-import { generateBlankMap, generateBoard } from './map';
+import { generateBlankMap } from './map';
 import { drawGame } from './draw';
 import { update } from './update';
 import { Actor } from './objects/characters';
@@ -16,22 +16,25 @@ const player = new Actor({
   color: '#fff',
   type: 'player',
   x: 10,
-  y: 10
+  y: 20,
+  range: null
 });
 const monster = new Actor({
   glyph: 'g',
   color: '#f80',
   type: 'monster',
   x: 60,
-  y: 30
+  y: 30,
+  range: 20
 });
 
 const monster2 = new Actor({
   glyph: 'k',
   color: '#08f',
   type: 'monster',
-  x: 70,
-  y: 10
+  x: 40,
+  y: 15,
+  range: 15
 });
 
 const actors = [player, monster, monster2];

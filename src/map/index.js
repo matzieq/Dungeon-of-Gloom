@@ -22,11 +22,11 @@ const wallTile = new Tile({
 });
 
 export function generateBlankMap() {
-  const floor = Array(MAP_HEIGHT).fill(Array(MAP_WIDTH).fill('.'));
+  const floor = Array(MAP_HEIGHT).fill(Array(MAP_WIDTH).fill(0));
 
   return floor.map((row, y) =>
     row.map((tile, x) =>
-      (y > 2 && y < 30 && x === 25) ||
+      (y > 10 && y < 30 && x === 25) ||
       (x > 3 && x < 26 && y === 30) ||
       x === 0 ||
       x === MAP_WIDTH - 1 ||

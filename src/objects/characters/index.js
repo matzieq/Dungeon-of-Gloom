@@ -1,5 +1,9 @@
 import { directions } from '../../utils/constants';
-import { getRandomElement, distanceBetween } from '../../utils/lib';
+import {
+  getRandomElement,
+  distanceBetween,
+  lineOfSight
+} from '../../utils/lib';
 
 export function Character({ glyph, color }) {
   this.glyph = glyph;
@@ -11,10 +15,11 @@ export function Position({ x, y }) {
   this.y = y;
 }
 
-export function Actor({ glyph, color, type, x, y }) {
+export function Actor({ glyph, color, type, x, y, range }) {
   this.pos = new Position({ x, y });
   this.character = new Character({ glyph, color });
   this.type = type;
+  this.range = range;
   if (type === 'monster') {
     this.ai = wait;
   }
@@ -26,7 +31,8 @@ export function Tile({ type, glyph, color, flags }) {
   this.flags = flags;
 }
 
-function getMove({ distMap }) {
+function getMove(state) {
+  const { distMap } = state;
   const possibleMoves = directions.filter(direction => {
     const { x: dx, y: dy } = direction;
     const { x, y } = this.pos;
@@ -38,8 +44,12 @@ function getMove({ distMap }) {
   return getRandomElement(possibleMoves);
 }
 
-function wait({ player }) {
-  if (distanceBetween(player.pos, this.pos) < 10) {
+function wait(state) {
+  const { player } = state;
+  if (
+    distanceBetween(player.pos, this.pos) < this.range &&
+    lineOfSight(this.pos, player.pos, state)
+  ) {
     this.ai = getMove;
   }
   return { x: 0, y: 0 };

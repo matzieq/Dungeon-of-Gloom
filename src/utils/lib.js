@@ -7,27 +7,26 @@ export const distanceBetween = (pos1, pos2) =>
 
 export function lineOfSight(pos1, pos2, state) {
   let first = true;
-  let sx, sy, dx, dy;
+
   let { x: x1, y: y1 } = pos1;
   let { x: x2, y: y2 } = pos2;
 
   if (distanceBetween(pos1, pos2) === 1) return true;
 
-  dx = Math.abs(x2 - x1);
+  const dx = Math.abs(x2 - x1);
 
-  sx = x1 < x2 ? 1 : -1;
+  const sx = x1 < x2 ? 1 : -1;
 
-  dy = Math.abs(y2 - y1);
+  const dy = Math.abs(y2 - y1);
 
-  sy = y1 < y2 ? 1 : -1;
+  const sy = y1 < y2 ? 1 : -1;
 
   let err = dx - dy;
   let e2;
-  console.log('***');
-  console.log(x2, y2);
+
   while (!(x1 === x2 && y1 === y2)) {
     if (!first && !state.floor[y1][x1].flags.walkable) return false;
-    console.log(x1, y1);
+
     first = false;
     e2 = 2 * err;
 

@@ -1,6 +1,3 @@
-import { MAP_HEIGHT, MAP_WIDTH } from '../utils/constants';
-import { distanceMap } from '../map';
-
 export function drawGame({ floor, actors, player, surface: { canvas, ctx } }) {
   const tileSize = window.innerWidth / 80;
   const mapWithActors = [...drawActors(floor, actors)];
