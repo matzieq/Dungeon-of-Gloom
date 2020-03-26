@@ -1,27 +1,33 @@
-import { MAP_HEIGHT, MAP_WIDTH, SCREEN_HEIGHT } from "../utils/constants";
-import { range } from "../utils/lib";
-import { Tile } from "../objects/characters";
+import {
+  MAP_HEIGHT,
+  MAP_WIDTH,
+  SCREEN_HEIGHT,
+  directions
+} from '../utils/constants';
+import { range } from '../utils/lib';
+import { Tile } from '../objects/characters';
 
 const floorTile = new Tile({
-  type: "floor",
-  glyph: ".",
-  color: "#333",
+  type: 'floor',
+  glyph: '.',
+  color: '#333',
   flags: { walkable: true }
 });
 
 const wallTile = new Tile({
-  type: "wall",
-  glyph: "#",
-  color: "#ff6633",
+  type: 'wall',
+  glyph: '#',
+  color: '#ff6633',
   flags: { walkable: false }
 });
 
 export function generateBlankMap() {
-  const floor = Array(MAP_HEIGHT).fill(Array(MAP_WIDTH).fill("."));
+  const floor = Array(MAP_HEIGHT).fill(Array(MAP_WIDTH).fill('.'));
 
   return floor.map((row, y) =>
     row.map((tile, x) =>
-      Math.random() < 0.1 ||
+      (y > 2 && y < 30 && x === 25) ||
+      (x > 3 && x < 26 && y === 30) ||
       x === 0 ||
       x === MAP_WIDTH - 1 ||
       y === 0 ||
@@ -31,13 +37,6 @@ export function generateBlankMap() {
     )
   );
 }
-
-const moveArr = [
-  { x: -1, y: 0 },
-  { x: 1, y: 0 },
-  { x: 0, y: -1 },
-  { x: 0, y: 1 }
-];
 
 export function distanceMap({ floor, actor }) {
   const dMap = floor.map(row => row.map(() => null));
@@ -50,7 +49,7 @@ export function distanceMap({ floor, actor }) {
       const { x, y } = coordSet;
       dMap[y][x] = currentDistance;
 
-      moveArr.forEach(moveDestination => {
+      directions.forEach(moveDestination => {
         const { x: dx, y: dy } = moveDestination;
         // console.log(floor[y + dy][x + dx]);
         if (dMap[y + dy][x + dx] !== null) return;
@@ -76,13 +75,13 @@ export function distanceMap({ floor, actor }) {
 }
 
 export function generateBoard() {
-  const board = document.getElementById("board");
-  board.innerHTML = "";
+  const board = document.getElementById('board');
+  board.innerHTML = '';
   range(MAP_HEIGHT).forEach(() => {
     board.innerHTML += '<p class="row"></p>';
   });
 
-  const rows = board.querySelectorAll(".row");
+  const rows = board.querySelectorAll('.row');
 
   rows.forEach(row => {
     row.style.fontSize = `${(window.innerHeight * 0.9) / SCREEN_HEIGHT}px`;

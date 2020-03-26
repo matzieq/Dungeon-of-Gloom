@@ -1,5 +1,5 @@
-const drawToConsole = (glyph, color) =>
-  `<span style="color: ${color}">${glyph}</span>`;
+import { directions } from '../../utils/constants';
+import { getRandomElement } from '../../utils/lib';
 
 export class Character {
   constructor({ glyph, color }) {
@@ -11,10 +11,6 @@ export class Character {
     const { glyph, color } = this;
     return { glyph, color };
   }
-
-  draw() {
-    return drawToConsole(this.glyph, this.color);
-  }
 }
 
 export class Position {
@@ -25,9 +21,13 @@ export class Position {
 }
 
 export class Actor {
-  constructor({ glyph, color }) {
-    this.pos = new Position({ x: 5, y: 5 });
+  constructor({ glyph, color, type, x, y }) {
+    this.pos = new Position({ x, y });
     this.character = new Character({ glyph, color });
+    this.type = type;
+    if (type === 'monster') {
+      this.ai = getMove;
+    }
   }
 }
 
@@ -38,3 +38,15 @@ export class Tile {
     this.flags = flags;
   }
 }
+
+const getMove = function(distMap) {
+  const possibleMoves = directions.filter(direction => {
+    const { x: dx, y: dy } = direction;
+    const { x, y } = this.pos;
+    const newPosDistance = distMap[y + dy][x + dx] || 9999;
+    const oldPosDistance = distMap[y][x];
+    return newPosDistance < oldPosDistance;
+  });
+  console.log(possibleMoves);
+  return getRandomElement(possibleMoves);
+};
