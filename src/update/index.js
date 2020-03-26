@@ -1,4 +1,5 @@
 import { distanceMap } from '../map';
+import { distanceBetween, lineOfSight } from '../utils/lib';
 
 function moveActor(actor, floor, { x, y }) {
   if (floor[actor.pos.y + y][actor.pos.x + x].flags.walkable) {
@@ -28,14 +29,18 @@ function handleKeys(e) {
   return { dir };
 }
 
-export function update(e, { player, floor, actors }) {
+export function update(e, state) {
+  const { player, floor, actors } = state;
   const { dir } = handleKeys(e);
-  const distMap = distanceMap({ floor, actor: player });
+  state.distMap = distanceMap({ floor, actor: player });
 
   moveActor(player, floor, dir);
   actors.forEach(actor => {
     if (actor.ai) {
-      moveActor(actor, floor, actor.ai(distMap));
+      console.log(lineOfSight(player.pos, actor.pos, state));
+      if (distanceBetween(actor.pos, player.pos) < 10) {
+        moveActor(actor, floor, actor.ai(state));
+      }
     }
   });
 }

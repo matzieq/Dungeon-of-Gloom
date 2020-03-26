@@ -10,7 +10,7 @@ export function drawGame({ floor, actors, player, surface: { canvas, ctx } }) {
   ctx.font = `${tileSize}px Source Code Pro`;
   mapWithActors.forEach((row, y) =>
     row.forEach((tile, x) => {
-      const { glyph, color } = tile.character.getData();
+      const { glyph, color } = tile.character;
       ctx.fillStyle = color;
       ctx.fillText(glyph, x * tileSize * 0.7, (y + 1) * tileSize);
 

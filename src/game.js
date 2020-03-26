@@ -26,7 +26,15 @@ const monster = new Actor({
   y: 30
 });
 
-const actors = [player, monster];
+const monster2 = new Actor({
+  glyph: 'k',
+  color: '#08f',
+  type: 'monster',
+  x: 70,
+  y: 10
+});
+
+const actors = [player, monster, monster2];
 
 const state = { floor, actors, player, surface: { canvas, ctx } };
 
@@ -40,8 +48,6 @@ const resizeGame = () => {
 };
 
 resizeGame();
-
-// generateBoard();
 
 drawGame(state);
 
