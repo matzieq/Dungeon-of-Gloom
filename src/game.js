@@ -17,7 +17,9 @@ const player = new Actor({
   type: 'player',
   x: 10,
   y: 20,
-  range: null
+  range: null,
+  hp: 5,
+  attack: 2
 });
 const monster = new Actor({
   glyph: 'g',
@@ -25,7 +27,9 @@ const monster = new Actor({
   type: 'monster',
   x: 60,
   y: 30,
-  range: 20
+  range: 20,
+  hp: 1,
+  attack: 1
 });
 
 const monster2 = new Actor({
@@ -34,15 +38,18 @@ const monster2 = new Actor({
   type: 'monster',
   x: 40,
   y: 15,
-  range: 15
+  range: 15,
+  hp: 3,
+  attack: 2
 });
 
-const actors = [player, monster, monster2];
+const actors = [monster, monster2, player];
 
 const state = { floor, actors, player, surface: { canvas, ctx } };
 
 const resizeGame = () => {
   const tileSize = window.innerWidth / 80;
+  ctx.font = `${tileSize}px Source Code Pro`;
 
   canvas.width = MAP_WIDTH * tileSize * 0.7;
   canvas.height = MAP_HEIGHT * tileSize;

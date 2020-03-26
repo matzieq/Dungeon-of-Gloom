@@ -1,10 +1,36 @@
 import { distanceMap } from '../map';
 import { distanceBetween, lineOfSight } from '../utils/lib';
 
-function moveActor(actor, floor, { x, y }) {
-  if (floor[actor.pos.y + y][actor.pos.x + x].flags.walkable) {
-    actor.pos.x += x;
-    actor.pos.y += y;
+function moveActor(actor, state, dir) {
+  if (!dir) return;
+  const { x: dx, y: dy } = dir;
+  if (!actor.alive) return;
+  const { floor, actors } = state;
+  if (floor[actor.pos.y + dy][actor.pos.x + dx].flags.walkable) {
+    const actorIndex = actors.indexOf(actor);
+    const occupied = actors.find(
+      (other, index) =>
+        other.pos.x === actor.pos.x + dx &&
+        other.pos.y === actor.pos.y + dy &&
+        index !== actorIndex
+    );
+
+    if (occupied && occupied.alive) {
+      attack(actor, occupied, state);
+    } else {
+      actor.pos.x += dx;
+      actor.pos.y += dy;
+    }
+  }
+}
+
+function attack(attacker, defender, state) {
+  console.log(attacker);
+  console.log(defender);
+  defender.hp -= attacker.attack;
+  if (defender.hp <= 0) {
+    defender.alive = false;
+    defender.character.glyph = '%';
   }
 }
 
@@ -32,12 +58,12 @@ function handleKeys(e) {
 export function update(e, state) {
   const { player, floor, actors } = state;
   const { dir } = handleKeys(e);
-  state.distMap = distanceMap({ floor, actor: player });
 
-  moveActor(player, floor, dir);
+  moveActor(player, state, dir);
+  state.distMap = distanceMap({ floor, actor: player });
   actors.forEach(actor => {
     if (actor.ai) {
-      moveActor(actor, floor, actor.ai(state));
+      moveActor(actor, state, actor.ai(state));
     }
   });
 }

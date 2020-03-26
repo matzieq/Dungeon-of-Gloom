@@ -15,11 +15,15 @@ export function Position({ x, y }) {
   this.y = y;
 }
 
-export function Actor({ glyph, color, type, x, y, range }) {
+export function Actor({ glyph, color, type, x, y, range, hp, attack }) {
   this.pos = new Position({ x, y });
   this.character = new Character({ glyph, color });
   this.type = type;
   this.range = range;
+  this.hp = hp;
+  this.maxHp = hp;
+  this.attack = attack;
+  this.alive = true;
   if (type === 'monster') {
     this.ai = wait;
   }
