@@ -5,12 +5,8 @@ import { Actor } from './objects/characters';
 
 import { MAP_WIDTH, MAP_HEIGHT } from './utils/constants';
 
-const tileSize = window.innerWidth / 80;
-
 const canvas = document.getElementById('canvas');
-canvas.width = MAP_WIDTH * tileSize * 0.7;
-canvas.height = MAP_HEIGHT * tileSize;
-canvas.style.width = `${MAP_WIDTH * tileSize * 0.7}px`;
+
 const ctx = canvas.getContext('2d');
 
 const floor = generateBlankMap();
@@ -34,6 +30,17 @@ const actors = [player, monster];
 
 const state = { floor, actors, player, surface: { canvas, ctx } };
 
+const resizeGame = () => {
+  const tileSize = window.innerWidth / 80;
+
+  canvas.width = MAP_WIDTH * tileSize * 0.7;
+  canvas.height = MAP_HEIGHT * tileSize;
+  canvas.style.width = `${MAP_WIDTH * tileSize * 0.7}px`;
+  drawGame(state);
+};
+
+resizeGame();
+
 // generateBoard();
 
 drawGame(state);
@@ -43,3 +50,5 @@ document.addEventListener('keydown', e => {
 
   drawGame(state);
 });
+
+window.addEventListener('resize', resizeGame);
