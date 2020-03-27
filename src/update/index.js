@@ -1,5 +1,11 @@
 import { distanceMap } from '../map';
 import { distanceBetween, lineOfSight } from '../utils/lib';
+import {
+  directions,
+  FOG_EXPLORED,
+  FOG_UNEXPLORED,
+  FOG_VISIBLE
+} from '../utils/constants';
 
 function moveActor(actor, state, dir) {
   if (!dir) return;
@@ -60,8 +66,8 @@ export function update(e, state) {
 
   const { dir } = e ? handleKeys(e) : { x: 0, y: 0 };
 
-  unfog(state);
   moveActor(player, state, dir);
+  unfog(state);
   state.distMap = distanceMap({ floor, actor: player });
   actors.forEach(actor => {
     if (actor.ai) {
@@ -77,17 +83,34 @@ export function unfog(state) {
   floor.forEach((row, y) => {
     row.forEach((tile, x) => {
       const dist = distanceBetween(player.pos, { x, y });
-      if (dist <= player.range) {
-        console.log('lower');
-      }
+
       if (dist <= player.range && lineOfSight(player.pos, { x, y }, state)) {
-        if (tile.flags.fog === 0 || tile.flags.fog === 2) {
-          tile.flags.fog = 1;
+        if (
+          tile.flags.fog === FOG_UNEXPLORED ||
+          tile.flags.fog === FOG_EXPLORED
+        ) {
+          unfogTile(x, y, FOG_VISIBLE, tile, state);
         }
-      } else if (tile.flags.fog === 1) {
-        tile.flags.fog = 2;
+      } else if (tile.flags.fog === FOG_VISIBLE && dist > player.range) {
+        unfogTile(x, y, FOG_EXPLORED, tile, state);
       }
     });
   });
   console.log(floor);
+}
+
+export function unfogTile(x, y, fogValue, tile, state) {
+  tile.flags.fog = fogValue;
+  if (tile.flags.walkable) {
+    directions.forEach(dir => {
+      const tx = x + dir.x;
+      const ty = y + dir.y;
+      const { floor } = state;
+      const neighbouringTile = floor[ty] && floor[ty][tx];
+
+      if (neighbouringTile && !neighbouringTile.flags.walkable) {
+        neighbouringTile.flags.fog = fogValue;
+      }
+    });
+  }
 }

@@ -2,6 +2,9 @@ import {
   MAP_HEIGHT,
   MAP_WIDTH,
   SCREEN_HEIGHT,
+  FOG_EXPLORED,
+  FOG_UNEXPLORED,
+  FOG_VISIBLE,
   directions
 } from '../utils/constants';
 import { range } from '../utils/lib';
@@ -11,14 +14,14 @@ const floorTile = {
   type: 'floor',
   glyph: '.',
   color: '#333',
-  flags: { walkable: true, fog: 0 }
+  flags: { walkable: true, fog: FOG_UNEXPLORED }
 };
 
 const wallTile = {
   type: 'wall',
   glyph: '#',
   color: '#ff6633',
-  flags: { walkable: false, fog: 0 }
+  flags: { walkable: false, fog: FOG_UNEXPLORED }
 };
 export function generateBlankMap() {
   const floor = Array(MAP_HEIGHT).fill(Array(MAP_WIDTH).fill(0));
@@ -50,7 +53,7 @@ export function distanceMap({ floor, actor }) {
 
       directions.forEach(moveDestination => {
         const { x: dx, y: dy } = moveDestination;
-        // console.log(floor[y + dy][x + dx]);
+
         if (dMap[y + dy][x + dx] !== null) return;
         if (
           floor[y + dy] &&
