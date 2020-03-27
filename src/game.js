@@ -1,6 +1,6 @@
 import { generateBlankMap } from './map';
 import { drawGame } from './draw';
-import { update } from './update';
+import { update, unfog } from './update';
 import { Actor } from './objects/characters';
 
 import { MAP_WIDTH, MAP_HEIGHT } from './utils/constants';
@@ -17,7 +17,7 @@ const player = new Actor({
   type: 'player',
   x: 10,
   y: 20,
-  range: null,
+  range: 10,
   hp: 5,
   attack: 2
 });
@@ -59,8 +59,8 @@ const resizeGame = () => {
 
 resizeGame();
 
+unfog(state);
 drawGame(state);
-
 document.addEventListener('keydown', e => {
   update(e, state);
 

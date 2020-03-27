@@ -3,7 +3,9 @@ export const getRandomElement = arr =>
   arr[Math.floor(Math.random() * arr.length)];
 
 export const distanceBetween = (pos1, pos2) =>
-  Math.sqrt(Math.pow(pos1.x - pos2.x, 2) + Math.pow(pos1.y - pos2.y, 2));
+  Math.floor(
+    Math.sqrt(Math.pow(pos1.x - pos2.x, 2) + Math.pow(pos1.y - pos2.y, 2))
+  );
 
 export function lineOfSight(pos1, pos2, state) {
   let first = true;

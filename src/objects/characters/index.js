@@ -32,7 +32,7 @@ export function Actor({ glyph, color, type, x, y, range, hp, attack }) {
 export function Tile({ type, glyph, color, flags }) {
   this.type = type;
   this.character = new Character({ glyph, color });
-  this.flags = flags;
+  this.flags = { ...flags };
 }
 
 function getMove(state) {

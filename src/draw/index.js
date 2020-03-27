@@ -8,8 +8,19 @@ export function drawGame({ floor, actors, player, surface: { canvas, ctx } }) {
   mapWithActors.forEach((row, y) =>
     row.forEach((tile, x) => {
       const { glyph, color } = tile.character;
-      ctx.fillStyle = color;
-      ctx.fillText(glyph, x * tileSize * 0.7, (y + 1) * tileSize);
+      const {
+        flags: { fog },
+        character: { glyph: floorGlyph }
+      } = floor[y][x];
+      if (fog === 1) {
+        ctx.fillStyle = color;
+
+        ctx.fillText(glyph, x * tileSize * 0.7, (y + 1) * tileSize);
+      } else if (fog === 2) {
+        ctx.fillStyle = '#111';
+
+        ctx.fillText(floorGlyph, x * tileSize * 0.7, (y + 1) * tileSize);
+      }
 
       // ctx.fillText(
       //   distMap[y][x] || "#",

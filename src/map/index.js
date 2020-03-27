@@ -7,20 +7,19 @@ import {
 import { range } from '../utils/lib';
 import { Tile } from '../objects/characters';
 
-const floorTile = new Tile({
+const floorTile = {
   type: 'floor',
   glyph: '.',
   color: '#333',
-  flags: { walkable: true }
-});
+  flags: { walkable: true, fog: 0 }
+};
 
-const wallTile = new Tile({
+const wallTile = {
   type: 'wall',
   glyph: '#',
   color: '#ff6633',
-  flags: { walkable: false }
-});
-
+  flags: { walkable: false, fog: 0 }
+};
 export function generateBlankMap() {
   const floor = Array(MAP_HEIGHT).fill(Array(MAP_WIDTH).fill(0));
 
@@ -32,8 +31,8 @@ export function generateBlankMap() {
       x === MAP_WIDTH - 1 ||
       y === 0 ||
       y === MAP_HEIGHT - 1
-        ? wallTile
-        : floorTile
+        ? new Tile(wallTile)
+        : new Tile(floorTile)
     )
   );
 }

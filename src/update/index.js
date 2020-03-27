@@ -57,8 +57,10 @@ function handleKeys(e) {
 
 export function update(e, state) {
   const { player, floor, actors } = state;
-  const { dir } = handleKeys(e);
 
+  const { dir } = e ? handleKeys(e) : { x: 0, y: 0 };
+
+  unfog(state);
   moveActor(player, state, dir);
   state.distMap = distanceMap({ floor, actor: player });
   actors.forEach(actor => {
@@ -66,4 +68,26 @@ export function update(e, state) {
       moveActor(actor, state, actor.ai(state));
     }
   });
+}
+
+export function unfog(state) {
+  const { floor, player } = state;
+  // console.log(player.pos);
+  // floor[player.pos.y][player.pos.x].flags.fog = 1;
+  floor.forEach((row, y) => {
+    row.forEach((tile, x) => {
+      const dist = distanceBetween(player.pos, { x, y });
+      if (dist <= player.range) {
+        console.log('lower');
+      }
+      if (dist <= player.range && lineOfSight(player.pos, { x, y }, state)) {
+        if (tile.flags.fog === 0 || tile.flags.fog === 2) {
+          tile.flags.fog = 1;
+        }
+      } else if (tile.flags.fog === 1) {
+        tile.flags.fog = 2;
+      }
+    });
+  });
+  console.log(floor);
 }
