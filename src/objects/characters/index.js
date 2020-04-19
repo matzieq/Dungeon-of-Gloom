@@ -1,43 +1,45 @@
-import { directions } from '../../utils/constants';
+import { directions } from "../../utils/constants";
 import {
   getRandomElement,
   distanceBetween,
-  lineOfSight
-} from '../../utils/lib';
+  lineOfSight,
+} from "../../utils/lib";
 
-export function Character({ glyph, color }) {
-  this.glyph = glyph;
-  this.color = color;
-}
+export const Character = (glyph = "x", color = "#fff") => ({
+  glyph,
+  color,
+});
 
-export function Position({ x, y }) {
-  this.x = x;
-  this.y = y;
-}
+export const Position = (x = 0, y = 0) => ({
+  x,
+  y,
+  move(dx, dy) {
+    this.x += dx;
+    this.y += dy;
+  },
+});
 
-export function Actor({ glyph, color, type, x, y, range, hp, attack }) {
-  this.pos = new Position({ x, y });
-  this.character = new Character({ glyph, color });
-  this.type = type;
-  this.range = range;
-  this.hp = hp;
-  this.maxHp = hp;
-  this.attack = attack;
-  this.alive = true;
-  if (type === 'monster') {
-    this.ai = wait;
-  }
-}
+export const Actor = ({ glyph, color, type, x, y, range, hp, attack }) => ({
+  pos: Position(x, y),
+  character: Character(glyph, color),
+  type,
+  range,
+  hp,
+  maxHp: hp,
+  attack,
+  alive: true,
+  ai: type === "monster" ? wait : null,
+});
 
-export function Tile({ type, glyph, color, flags }) {
-  this.type = type;
-  this.character = new Character({ glyph, color });
-  this.flags = { ...flags };
-}
+export const Tile = ({ type, glyph, color, flags }) => ({
+  type,
+  character: Character(glyph, color),
+  flags: { ...flags },
+});
 
 function getMove(state) {
   const { distMap } = state;
-  const possibleMoves = directions.filter(direction => {
+  const possibleMoves = directions.filter((direction) => {
     const { x: dx, y: dy } = direction;
     const { x, y } = this.pos;
     const newPosDistance = distMap[y + dy][x + dx] || 9999;

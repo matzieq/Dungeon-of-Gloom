@@ -1,11 +1,11 @@
-import { distanceMap } from '../map';
-import { distanceBetween, lineOfSight } from '../utils/lib';
+import { distanceMap } from "../map";
+import { distanceBetween, lineOfSight } from "../utils/lib";
 import {
   directions,
   FOG_EXPLORED,
   FOG_UNEXPLORED,
-  FOG_VISIBLE
-} from '../utils/constants';
+  FOG_VISIBLE,
+} from "../utils/constants";
 
 function moveActor(actor, state, dir) {
   if (!dir) return;
@@ -36,7 +36,7 @@ function attack(attacker, defender, state) {
   defender.hp -= attacker.attack;
   if (defender.hp <= 0) {
     defender.alive = false;
-    defender.character.glyph = '%';
+    defender.character.glyph = "%";
   }
 }
 
@@ -69,7 +69,7 @@ export function update(e, state) {
   moveActor(player, state, dir);
   unfog(state);
   state.distMap = distanceMap({ floor, actor: player });
-  actors.forEach(actor => {
+  actors.forEach((actor) => {
     if (actor.ai) {
       moveActor(actor, state, actor.ai(state));
     }
@@ -96,13 +96,12 @@ export function unfog(state) {
       }
     });
   });
-  console.log(floor);
 }
 
 export function unfogTile(x, y, fogValue, tile, state) {
   tile.flags.fog = fogValue;
   if (tile.flags.walkable) {
-    directions.forEach(dir => {
+    directions.forEach((dir) => {
       const tx = x + dir.x;
       const ty = y + dir.y;
       const { floor } = state;
