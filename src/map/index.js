@@ -6,9 +6,9 @@ import {
   FOG_UNEXPLORED,
   FOG_VISIBLE,
   directions,
-} from "../utils/constants";
-import { range } from "../utils/lib";
-import { Tile } from "../objects/characters";
+} from "../utils/constants.js";
+import { range } from "../utils/lib.js";
+import { Tile } from "../objects/characters/index.js";
 
 const inintialMap = [
   [
@@ -4115,24 +4115,21 @@ const inintialMap = [
 
 const floorTile = {
   type: "floor",
-  glyph: ".",
+  name: "floor",
   color: "#333",
   flags: { walkable: true, fog: FOG_UNEXPLORED },
 };
 
 const wallTile = {
   type: "wall",
-  glyph: "#",
+  name: "wall",
   color: "#ff6633",
   flags: { walkable: false, fog: FOG_UNEXPLORED },
 };
-export function generateBlankMap() {
-  const floor = Array(MAP_HEIGHT).fill(Array(MAP_WIDTH).fill(0));
-
-  return inintialMap.map((row, y) =>
+export const generateBlankMap = () =>
+  inintialMap.map((row, y) =>
     row.map((tile, x) => (tile === 1 ? Tile(wallTile) : Tile(floorTile)))
   );
-}
 
 export function distanceMap({ floor, actor }) {
   const dMap = floor.map((row) => row.map(() => null));

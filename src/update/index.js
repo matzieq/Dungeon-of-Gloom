@@ -1,11 +1,11 @@
-import { distanceMap } from "../map";
-import { distanceBetween, lineOfSight } from "../utils/lib";
+import { distanceMap } from "../map/index.js";
+import { distanceBetween, lineOfSight } from "../utils/lib.js";
 import {
   directions,
   FOG_EXPLORED,
   FOG_UNEXPLORED,
   FOG_VISIBLE,
-} from "../utils/constants";
+} from "../utils/constants.js";
 
 function moveActor(actor, state, dir) {
   if (!dir) return;
@@ -36,7 +36,7 @@ function attack(attacker, defender, state) {
   defender.hp -= attacker.attack;
   if (defender.hp <= 0) {
     defender.alive = false;
-    defender.character.glyph = "%";
+    defender.character.name = "dead";
   }
 }
 

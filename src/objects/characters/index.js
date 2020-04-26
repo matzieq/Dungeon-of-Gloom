@@ -1,13 +1,13 @@
-import { directions } from "../../utils/constants";
+import { directions } from "../../utils/constants.js";
 import {
   getRandomElement,
   distanceBetween,
   lineOfSight,
-} from "../../utils/lib";
+} from "../../utils/lib.js";
 
-export const Character = (glyph = "x", color = "#fff") => ({
-  glyph,
+export const Character = (color = "#fff", name = "") => ({
   color,
+  name,
 });
 
 export const Position = (x = 0, y = 0) => ({
@@ -19,9 +19,9 @@ export const Position = (x = 0, y = 0) => ({
   },
 });
 
-export const Actor = ({ glyph, color, type, x, y, range, hp, attack }) => ({
+export const Actor = ({ name, color, type, x, y, range, hp, attack }) => ({
   pos: Position(x, y),
-  character: Character(glyph, color),
+  character: Character(color, name),
   type,
   range,
   hp,
@@ -31,9 +31,9 @@ export const Actor = ({ glyph, color, type, x, y, range, hp, attack }) => ({
   ai: type === "monster" ? wait : null,
 });
 
-export const Tile = ({ type, glyph, color, flags }) => ({
+export const Tile = ({ type, name, color, flags }) => ({
   type,
-  character: Character(glyph, color),
+  character: Character(color, name),
   flags: { ...flags },
 });
 

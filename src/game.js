@@ -1,9 +1,9 @@
-import { generateBlankMap } from "./map";
-import { drawGame } from "./draw";
-import { update, unfog } from "./update";
-import { Actor } from "./objects/characters";
+import { generateBlankMap } from "./map/index.js";
+import { drawGame } from "./draw/index.js";
+import { update, unfog } from "./update/index.js";
+import { Actor } from "./objects/characters/index.js";
 
-import { MAP_WIDTH, MAP_HEIGHT } from "./utils/constants";
+import { MAP_WIDTH, MAP_HEIGHT } from "./utils/constants.js";
 
 const canvas = document.getElementById("canvas");
 
@@ -12,9 +12,9 @@ const ctx = canvas.getContext("2d");
 const floor = generateBlankMap();
 
 const player = Actor({
-  glyph: "@",
   color: "#fff",
   type: "player",
+  name: "player",
   x: 5,
   y: 5,
   range: 10,
@@ -22,9 +22,9 @@ const player = Actor({
   attack: 2,
 });
 const monster = Actor({
-  glyph: "g",
   color: "#f80",
   type: "monster",
+  name: "goblin",
   x: 60,
   y: 30,
   range: 20,
@@ -33,9 +33,9 @@ const monster = Actor({
 });
 
 const monster2 = Actor({
-  glyph: "k",
   color: "#08f",
   type: "monster",
+  name: "kobold",
   x: 40,
   y: 15,
   range: 15,
@@ -57,13 +57,15 @@ const resizeGame = () => {
   drawGame(state);
 };
 
-resizeGame();
-
 unfog(state);
-drawGame(state);
+
+resizeGame();
+setInterval(() => {
+  drawGame(state);
+}, 33);
+
 document.addEventListener("keydown", (e) => {
   update(e, state);
-
   drawGame(state);
 });
 
