@@ -1,5 +1,7 @@
-export const range = length => [...Array(length).keys()];
-export const getRandomElement = arr =>
+import { MAP_WIDTH } from "./constants.js";
+
+export const range = (length) => [...Array(length).keys()];
+export const getRandomElement = (arr) =>
   arr[Math.floor(Math.random() * arr.length)];
 
 export const distanceBetween = (pos1, pos2) =>
@@ -44,3 +46,5 @@ export function lineOfSight(pos1, pos2, state) {
   }
   return true;
 }
+
+export const tileSize = () => window.innerWidth / MAP_WIDTH;

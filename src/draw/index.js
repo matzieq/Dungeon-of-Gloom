@@ -1,8 +1,6 @@
-import {
-  FOG_EXPLORED,
-  FOG_UNEXPLORED,
-  FOG_VISIBLE,
-} from "../utils/constants.js";
+import { FOG_EXPLORED, FOG_VISIBLE } from "../utils/constants.js";
+
+import { tileSize } from "../utils/lib.js";
 
 let glyphAtlas = null;
 
@@ -25,15 +23,25 @@ function drawActorsAscii(floor, actors) {
   return newMap;
 }
 
-function drawGameAscii({ floor, actors, player, surface: { canvas, ctx } }) {
-  if (!glyphAtlas) return;
-  const tileSize = window.innerWidth / 80;
-  const mapWithActors = [...drawActorsAscii(floor, actors)];
+const mapWithActors = (floor, actors) => [...drawActorsAscii(floor, actors)];
 
+function clearScreen(canvas, ctx) {
   ctx.fillStyle = "#000";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
-  ctx.font = `${tileSize}px Source Code Pro`;
-  mapWithActors.forEach((row, y) =>
+}
+
+function setupFont(ctx) {
+  ctx.font = `${tileSize()}px Source Code Pro`;
+}
+
+function setupScreen(canvas, ctx) {
+  clearScreen(canvas, ctx);
+  setupFont(ctx);
+}
+
+function drawGameAscii({ floor, actors, player, surface: { canvas, ctx } }) {
+  setupScreen(canvas, ctx);
+  mapWithActors(floor, actors).forEach((row, y) =>
     row.forEach((tile, x) => {
       const { color, name } = tile.character;
 
@@ -49,14 +57,19 @@ function drawGameAscii({ floor, actors, player, surface: { canvas, ctx } }) {
       if (fog === FOG_VISIBLE) {
         ctx.fillStyle = color;
 
-        ctx.fillText(glyph, x * tileSize * 0.7, (y + 1) * tileSize);
+        ctx.fillText(glyph, x * tileSize() * 0.7, (y + 1) * tileSize());
       } else if (fog === FOG_EXPLORED) {
         ctx.fillStyle = "#595959";
 
-        ctx.fillText(floorGlyph, x * tileSize * 0.7, (y + 1) * tileSize);
+        ctx.fillText(floorGlyph, x * tileSize() * 0.7, (y + 1) * tileSize());
       }
     })
   );
 }
 
-export const drawGame = drawGameAscii;
+export const drawGame = (state) => {
+  if (!glyphAtlas) {
+    return;
+  }
+  drawGameAscii(state);
+};
