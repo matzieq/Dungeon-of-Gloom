@@ -32,7 +32,7 @@ function setupScreen(canvas, ctx) {
 }
 
 function drawGameAscii(
-  { floor, actors, player, surface: { canvas, ctx } },
+  { floor, actors, player, surface: { canvas, ctx }, debugMap },
   glyphAtlas
 ) {
   setupScreen(canvas, ctx);
@@ -51,12 +51,20 @@ function drawGameAscii(
 
         ctx.fillText(glyph, x * tileSize() * 0.7, (y + 1) * tileSize());
       } else if (fog === FOG_EXPLORED) {
-        ctx.fillStyle = "#595959";
+        ctx.fillStyle = "#393939";
 
         ctx.fillText(floorGlyph, x * tileSize() * 0.7, (y + 1) * tileSize());
       }
+      if (debugMap[y] && debugMap[y][x]) {
+        ctx.fillText(
+          debugMap[y][x],
+          x * tileSize() * 0.7,
+          (y + 1) * tileSize()
+        );
+      }
     })
   );
+  ctx.fillStyle = "#2378cc";
   ctx.fillText(
     `HP: ${player.stats.hp} / ${player.stats.maxHp}`,
     0,

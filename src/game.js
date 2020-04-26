@@ -19,7 +19,7 @@ const player = Actor({
   name: "player",
   x: 5,
   y: 5,
-  range: 10,
+  range: 20,
   hp: 5,
   attack: 2,
 });
@@ -47,7 +47,7 @@ const monster2 = Actor({
 
 const actors = [monster, monster2, player];
 
-const state = { floor, actors, player, surface: { canvas, ctx } };
+const state = { floor, actors, player, surface: { canvas, ctx }, debugMap: [] };
 
 const { glyphAtlas } = gameData;
 
@@ -66,7 +66,7 @@ unfog(state);
 resizeGame();
 setInterval(() => {
   drawGame(state, glyphAtlas);
-}, 33);
+}, 100);
 
 document.addEventListener("keydown", (e) => {
   update(e, state);

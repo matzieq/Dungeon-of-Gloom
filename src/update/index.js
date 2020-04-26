@@ -78,30 +78,33 @@ export function update(e, state) {
 }
 
 export function unfog(state) {
-  const { floor, player } = state;
+  console.log("Fired");
+  const { floor, player, debugMap } = state;
   // console.log(player.pos);
   // floor[player.pos.y][player.pos.x].flags.fog = 1;
+  floor.forEach((row, y) => {
+    // debugMap[y] = [];
+    row.forEach((tile, x) => {
+      if (tile.flags.fog === FOG_VISIBLE) {
+        // debugMap[y][x] = "O";
+        unfogTileSimple(tile, FOG_EXPLORED);
+      }
+    });
+  });
   floor.forEach((row, y) => {
     row.forEach((tile, x) => {
       const dist = distanceBetween(player.pos, { x, y });
       const hasLineOfSight = lineOfSight(player.pos, { x, y }, state);
-      if (
-        tile.flags.fog === FOG_VISIBLE
-        // dist > player.stats.range &&
-        // !hasLineOfSight
-      ) {
-        unfogTile(x, y, FOG_EXPLORED, tile, state);
-      }
+
       if (dist <= player.stats.range && hasLineOfSight) {
-        if (
-          tile.flags.fog === FOG_UNEXPLORED ||
-          tile.flags.fog === FOG_EXPLORED
-        ) {
-          unfogTile(x, y, FOG_VISIBLE, tile, state);
-        }
+        unfogTile(x, y, FOG_VISIBLE, tile, state);
       }
     });
   });
+}
+
+function unfogTileSimple(tile, fogValue) {
+  tile.flags.fog = fogValue;
 }
 
 export function unfogTile(x, y, fogValue, tile, state) {
@@ -111,7 +114,7 @@ export function unfogTile(x, y, fogValue, tile, state) {
       const tx = x + dir.x;
       const ty = y + dir.y;
       const { floor, player } = state;
-      const neighbouringTile = floor[ty] && floor[ty][tx];
+      const neighbouringTile = floor[ty] ? floor[ty][tx] : null;
 
       if (
         neighbouringTile &&
@@ -119,6 +122,12 @@ export function unfogTile(x, y, fogValue, tile, state) {
         // distanceBetween(player.pos, { tx, ty }) <= player.stats.range
       ) {
         neighbouringTile.flags.fog = fogValue;
+        // state.debugMap[ty][tx] = "F";
+        // console.log(state.debugMap);
+        // if (!state.debugMap[ty]) {
+        //   state.debugMap[ty] = [];
+        // }
+        // state.debugMap[ty][tx] = "F";
       }
     });
   }

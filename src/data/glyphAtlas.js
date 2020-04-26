@@ -2,7 +2,7 @@ export default [
   {
     name: "player",
     glyph: "@",
-    color: "#fff",
+    color: "#bed",
   },
   {
     name: "goblin",
@@ -17,12 +17,12 @@ export default [
   {
     name: "wall",
     glyph: "#",
-    color: "#ff6633",
+    color: "#1298ab",
   },
   {
     name: "floor",
     glyph: ".",
-    color: "#333",
+    color: "#987881",
   },
   {
     name: "dead",
