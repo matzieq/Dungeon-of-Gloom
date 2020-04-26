@@ -19,21 +19,41 @@ export const Position = (x = 0, y = 0) => ({
   },
 });
 
-export const Actor = ({ name, color, type, x, y, range, hp, attack }) => ({
-  pos: Position(x, y),
-  character: Character(color, name),
+export const Actor = ({
+  name,
   type,
+  x,
+  y,
+  range,
+  hp,
+  attack = 1,
+  defense = 0,
+  level = 1,
+  xp = 0,
+}) => ({
+  pos: Position(x, y),
+  name,
+  type,
+
+  alive: true,
+  stats: Statblock({ range, hp, attack, defense, level, xp }),
+  ai: type === "monster" ? wait : null,
+});
+
+export const Statblock = ({ range, hp, attack, defense, level, xp }) => ({
   range,
   hp,
   maxHp: hp,
   attack,
-  alive: true,
-  ai: type === "monster" ? wait : null,
+  defense,
+  level,
+  xp,
+  currentXp: 0,
 });
 
-export const Tile = ({ type, name, color, flags }) => ({
+export const Tile = ({ type, name, flags }) => ({
   type,
-  character: Character(color, name),
+  name,
   flags: { ...flags },
 });
 
@@ -53,7 +73,7 @@ function getMove(state) {
 function wait(state) {
   const { player } = state;
   if (
-    distanceBetween(player.pos, this.pos) < this.range &&
+    distanceBetween(player.pos, this.pos) < this.stats.range &&
     lineOfSight(this.pos, player.pos, state)
   ) {
     this.ai = getMove;

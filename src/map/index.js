@@ -6,6 +6,7 @@ import {
   FOG_UNEXPLORED,
   FOG_VISIBLE,
   directions,
+  directionsWithDiagonals,
 } from "../utils/constants.js";
 import { range } from "../utils/lib.js";
 import { Tile } from "../objects/characters/index.js";
@@ -4142,7 +4143,7 @@ export function distanceMap({ floor, actor }) {
       const { x, y } = coordSet;
       dMap[y][x] = currentDistance;
 
-      directions.forEach((moveDestination) => {
+      directionsWithDiagonals.forEach((moveDestination) => {
         const { x: dx, y: dy } = moveDestination;
 
         if (dMap[y + dy][x + dx] !== null) return;

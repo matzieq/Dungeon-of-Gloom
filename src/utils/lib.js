@@ -1,4 +1,4 @@
-import { MAP_WIDTH } from "./constants.js";
+import { MAP_WIDTH, MAP_HEIGHT } from "./constants.js";
 
 export const range = (length) => [...Array(length).keys()];
 export const getRandomElement = (arr) =>
@@ -28,8 +28,13 @@ export function lineOfSight(pos1, pos2, state) {
   let err = dx - dy;
   let e2;
 
+  let prev = true;
   while (!(x1 === x2 && y1 === y2)) {
     if (!first && !state.floor[y1][x1].flags.walkable) return false;
+
+    // if (!prev) return false;
+
+    // if (!state.floor[y1][x1].flags.walkable) prev = false;
 
     first = false;
     e2 = 2 * err;
@@ -47,4 +52,5 @@ export function lineOfSight(pos1, pos2, state) {
   return true;
 }
 
-export const tileSize = () => window.innerWidth / MAP_WIDTH;
+export const tileSize = () =>
+  Math.min(window.innerWidth / MAP_WIDTH, window.innerHeight / MAP_HEIGHT);

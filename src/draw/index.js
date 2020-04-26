@@ -1,14 +1,6 @@
-import { FOG_EXPLORED, FOG_VISIBLE } from "../utils/constants.js";
+import { FOG_EXPLORED, FOG_VISIBLE, MAP_HEIGHT } from "../utils/constants.js";
 
 import { tileSize } from "../utils/lib.js";
-
-let glyphAtlas = null;
-
-fetch("./src/draw/glyphAtlas.json")
-  .then((res) => res.json())
-  .then((data) => {
-    glyphAtlas = data;
-  });
 
 function drawActorsAscii(floor, actors) {
   const newMap = floor.map((row) => row.map((item) => item));
@@ -39,20 +31,20 @@ function setupScreen(canvas, ctx) {
   setupFont(ctx);
 }
 
-function drawGameAscii({ floor, actors, player, surface: { canvas, ctx } }) {
+function drawGameAscii(
+  { floor, actors, player, surface: { canvas, ctx } },
+  glyphAtlas
+) {
   setupScreen(canvas, ctx);
   mapWithActors(floor, actors).forEach((row, y) =>
     row.forEach((tile, x) => {
-      const { color, name } = tile.character;
-
-      const glyph = glyphAtlas.find((el) => el.name === name).glyph;
+      const { glyph, color } = glyphAtlas.find((el) => el.name === tile.name);
       const {
         flags: { fog },
-        character: { name: floorCharName },
+        name,
       } = floor[y][x];
 
-      const floorGlyph = glyphAtlas.find((el) => el.name === floorCharName)
-        .glyph;
+      const { glyph: floorGlyph } = glyphAtlas.find((el) => el.name === name);
 
       if (fog === FOG_VISIBLE) {
         ctx.fillStyle = color;
@@ -65,11 +57,11 @@ function drawGameAscii({ floor, actors, player, surface: { canvas, ctx } }) {
       }
     })
   );
+  ctx.fillText(
+    `HP: ${player.stats.hp} / ${player.stats.maxHp}`,
+    0,
+    (MAP_HEIGHT - 1) * tileSize()
+  );
 }
 
-export const drawGame = (state) => {
-  if (!glyphAtlas) {
-    return;
-  }
-  drawGameAscii(state);
-};
+export const drawGame = drawGameAscii;

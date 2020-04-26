@@ -5,6 +5,8 @@ import { Actor } from "./objects/characters/index.js";
 
 import { MAP_WIDTH, MAP_HEIGHT } from "./utils/constants.js";
 
+import gameData from "./data/gameData.js";
+
 const canvas = document.getElementById("canvas");
 
 const ctx = canvas.getContext("2d");
@@ -47,6 +49,8 @@ const actors = [monster, monster2, player];
 
 const state = { floor, actors, player, surface: { canvas, ctx } };
 
+const { glyphAtlas } = gameData;
+
 const resizeGame = () => {
   const tileSize = window.innerWidth / 80;
   ctx.font = `${tileSize}px Source Code Pro`;
@@ -54,19 +58,19 @@ const resizeGame = () => {
   canvas.width = MAP_WIDTH * tileSize * 0.7;
   canvas.height = MAP_HEIGHT * tileSize;
   canvas.style.width = `${MAP_WIDTH * tileSize * 0.7}px`;
-  drawGame(state);
+  drawGame(state, glyphAtlas);
 };
 
 unfog(state);
 
 resizeGame();
 setInterval(() => {
-  drawGame(state);
+  drawGame(state, glyphAtlas);
 }, 33);
 
 document.addEventListener("keydown", (e) => {
   update(e, state);
-  drawGame(state);
+  drawGame(state, glyphAtlas);
 });
 
 window.addEventListener("resize", resizeGame);

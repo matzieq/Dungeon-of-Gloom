@@ -2,6 +2,7 @@ import { distanceMap } from "../map/index.js";
 import { distanceBetween, lineOfSight } from "../utils/lib.js";
 import {
   directions,
+  directionsWithDiagonals,
   FOG_EXPLORED,
   FOG_UNEXPLORED,
   FOG_VISIBLE,
@@ -33,10 +34,10 @@ function moveActor(actor, state, dir) {
 function attack(attacker, defender, state) {
   console.log(attacker);
   console.log(defender);
-  defender.hp -= attacker.attack;
-  if (defender.hp <= 0) {
+  defender.stats.hp -= attacker.stats.attack;
+  if (defender.stats.hp <= 0) {
     defender.alive = false;
-    defender.character.name = "dead";
+    defender.name = "dead";
   }
 }
 
@@ -83,16 +84,21 @@ export function unfog(state) {
   floor.forEach((row, y) => {
     row.forEach((tile, x) => {
       const dist = distanceBetween(player.pos, { x, y });
-
-      if (dist <= player.range && lineOfSight(player.pos, { x, y }, state)) {
+      const hasLineOfSight = lineOfSight(player.pos, { x, y }, state);
+      if (
+        tile.flags.fog === FOG_VISIBLE
+        // dist > player.stats.range &&
+        // !hasLineOfSight
+      ) {
+        unfogTile(x, y, FOG_EXPLORED, tile, state);
+      }
+      if (dist <= player.stats.range && hasLineOfSight) {
         if (
           tile.flags.fog === FOG_UNEXPLORED ||
           tile.flags.fog === FOG_EXPLORED
         ) {
           unfogTile(x, y, FOG_VISIBLE, tile, state);
         }
-      } else if (tile.flags.fog === FOG_VISIBLE && dist > player.range) {
-        unfogTile(x, y, FOG_EXPLORED, tile, state);
       }
     });
   });
@@ -101,13 +107,17 @@ export function unfog(state) {
 export function unfogTile(x, y, fogValue, tile, state) {
   tile.flags.fog = fogValue;
   if (tile.flags.walkable) {
-    directions.forEach((dir) => {
+    directionsWithDiagonals.forEach((dir) => {
       const tx = x + dir.x;
       const ty = y + dir.y;
-      const { floor } = state;
+      const { floor, player } = state;
       const neighbouringTile = floor[ty] && floor[ty][tx];
 
-      if (neighbouringTile && !neighbouringTile.flags.walkable) {
+      if (
+        neighbouringTile &&
+        !neighbouringTile.flags.walkable
+        // distanceBetween(player.pos, { tx, ty }) <= player.stats.range
+      ) {
         neighbouringTile.flags.fog = fogValue;
       }
     });
