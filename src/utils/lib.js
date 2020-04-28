@@ -54,3 +54,6 @@ export function lineOfSight(pos1, pos2, state) {
 
 export const tileSize = () =>
   Math.min(window.innerWidth / MAP_WIDTH, window.innerHeight / MAP_HEIGHT);
+
+export const copyCollection = (collection) =>
+  collection.map((item) => ({ ...item }));

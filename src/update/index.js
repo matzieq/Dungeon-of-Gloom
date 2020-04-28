@@ -116,18 +116,8 @@ export function unfogTile(x, y, fogValue, tile, state) {
       const { floor, player } = state;
       const neighbouringTile = floor[ty] ? floor[ty][tx] : null;
 
-      if (
-        neighbouringTile &&
-        !neighbouringTile.flags.walkable
-        // distanceBetween(player.pos, { tx, ty }) <= player.stats.range
-      ) {
+      if (neighbouringTile && !neighbouringTile.flags.walkable) {
         neighbouringTile.flags.fog = fogValue;
-        // state.debugMap[ty][tx] = "F";
-        // console.log(state.debugMap);
-        // if (!state.debugMap[ty]) {
-        //   state.debugMap[ty] = [];
-        // }
-        // state.debugMap[ty][tx] = "F";
       }
     });
   }

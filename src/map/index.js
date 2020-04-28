@@ -1,15 +1,11 @@
 import {
   MAP_HEIGHT,
-  MAP_WIDTH,
   SCREEN_HEIGHT,
-  FOG_EXPLORED,
   FOG_UNEXPLORED,
-  FOG_VISIBLE,
-  directions,
   directionsWithDiagonals,
 } from "../utils/constants.js";
 import { range } from "../utils/lib.js";
-import { Tile } from "../objects/characters/index.js";
+import Tile from "../objects/tile.js";
 
 const inintialMap = [
   [

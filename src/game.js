@@ -1,11 +1,12 @@
 import { generateBlankMap } from "./map/index.js";
 import { drawGame } from "./draw/index.js";
 import { update, unfog } from "./update/index.js";
-import { Actor } from "./objects/characters/index.js";
+import Actor from "./objects/actor.js";
 
 import { MAP_WIDTH, MAP_HEIGHT } from "./utils/constants.js";
 
 import gameData from "./data/gameData.js";
+import Item from "./objects/item.js";
 
 const canvas = document.getElementById("canvas");
 
@@ -44,6 +45,15 @@ const monster2 = Actor({
   hp: 3,
   attack: 2,
 });
+
+const dagger = Item(gameData.itemData.find((item) => item.name === "dagger"));
+const armor = Item(
+  gameData.itemData.find((item) => item.name === "leather armor")
+);
+console.log(dagger);
+
+player.takeItem(dagger);
+player.takeItem(armor);
 
 const actors = [monster, monster2, player];
 

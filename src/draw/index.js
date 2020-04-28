@@ -70,6 +70,15 @@ function drawGameAscii(
     0,
     (MAP_HEIGHT - 1) * tileSize()
   );
+  ctx.fillText(
+    `Backpack: ${player.items
+      .map((item) => item.name)
+      .toString()
+      .split(",")
+      .join(", ")}`,
+    200,
+    (MAP_HEIGHT - 1) * tileSize()
+  );
 }
 
 export const drawGame = drawGameAscii;
