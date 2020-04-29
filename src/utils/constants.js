@@ -22,3 +22,5 @@ export const directionsWithDiagonals = [
   { x: -1, y: 1 },
   { x: -1, y: -1 },
 ];
+
+export const BACKPACK_LIMIT = 10;

@@ -6,7 +6,8 @@ import Actor from "./objects/actor.js";
 import { MAP_WIDTH, MAP_HEIGHT } from "./utils/constants.js";
 
 import gameData from "./data/gameData.js";
-import Item from "./objects/item.js";
+import { Item } from "./objects/items.js";
+import { tileSize } from "./utils/lib.js";
 
 const canvas = document.getElementById("canvas");
 
@@ -52,8 +53,10 @@ const armor = Item(
 );
 console.log(dagger);
 
-player.takeItem(dagger);
-player.takeItem(armor);
+player.inventory.take(dagger);
+player.inventory.take(armor);
+player.inventory.equip(0);
+// player.inventory.equip(0);
 
 const actors = [monster, monster2, player];
 
@@ -62,12 +65,11 @@ const state = { floor, actors, player, surface: { canvas, ctx }, debugMap: [] };
 const { glyphAtlas } = gameData;
 
 const resizeGame = () => {
-  const tileSize = window.innerWidth / 80;
-  ctx.font = `${tileSize}px Source Code Pro`;
+  ctx.font = `${tileSize()}px Source Code Pro`;
 
-  canvas.width = MAP_WIDTH * tileSize * 0.7;
-  canvas.height = MAP_HEIGHT * tileSize;
-  canvas.style.width = `${MAP_WIDTH * tileSize * 0.7}px`;
+  canvas.width = MAP_WIDTH * tileSize();
+  canvas.height = MAP_HEIGHT * tileSize();
+  canvas.style.width = `${MAP_WIDTH * tileSize()}px`;
   drawGame(state, glyphAtlas);
 };
 

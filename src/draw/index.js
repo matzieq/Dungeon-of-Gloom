@@ -18,7 +18,7 @@ function drawActorsAscii(floor, actors) {
 const mapWithActors = (floor, actors) => [...drawActorsAscii(floor, actors)];
 
 function clearScreen(canvas, ctx) {
-  ctx.fillStyle = "#000";
+  ctx.fillStyle = "#222";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 }
 
@@ -71,12 +71,20 @@ function drawGameAscii(
     (MAP_HEIGHT - 1) * tileSize()
   );
   ctx.fillText(
-    `Backpack: ${player.items
-      .map((item) => item.name)
+    `Backpack: ${player.inventory.backpack
+      .map((item) => (item ? item.name : ""))
       .toString()
       .split(",")
       .join(", ")}`,
     200,
+    (MAP_HEIGHT - 1) * tileSize()
+  );
+  const { weapon, armor, ring } = player.inventory.equipment;
+  ctx.fillText(
+    `Weapon: ${weapon ? weapon.name : "none"}, Armor: ${
+      armor ? armor.name : "none"
+    }, Ring: ${ring ? ring.name : "none"}`,
+    500,
     (MAP_HEIGHT - 1) * tileSize()
   );
 }

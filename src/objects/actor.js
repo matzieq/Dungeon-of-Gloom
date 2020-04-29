@@ -1,6 +1,7 @@
 import Position from "./position.js";
 import Statblock from "./statblock.js";
 import { directions } from "../utils/constants.js";
+import { Inventory } from "../objects/items.js";
 import {
   getRandomElement,
   distanceBetween,
@@ -49,11 +50,7 @@ const Actor = ({
   alive: true,
   stats: Statblock({ range, hp, attack, defense, level, xp }),
   ai: type === "monster" ? wait : null,
-  items: [],
-  equipped: [],
-  takeItem(item) {
-    this.items.push(item);
-  },
+  inventory: Inventory(),
 });
 
 export default Actor;
