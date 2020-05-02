@@ -31,6 +31,42 @@ function setupScreen(canvas, ctx) {
   setupFont(ctx);
 }
 
+function drawStats(player, ctx) {
+  ctx.fillStyle = "#2378cc";
+  ctx.fillText(
+    `HP: ${player.stats.hp} / ${player.stats.maxHp}`,
+    0,
+    (MAP_HEIGHT + 1) * tileSize()
+  );
+  ctx.fillText(
+    `Backpack: ${player.inventory.backpack
+      .map((item) => (item ? item.name : ""))
+      .toString()
+      .split(",")
+      .join(", ")}`,
+    200,
+    (MAP_HEIGHT + 1) * tileSize()
+  );
+  const { weapon, armor, ring } = player.inventory.equipment;
+  ctx.fillText(
+    `Weapon: ${weapon ? weapon.name : "none"}, Armor: ${
+      armor ? armor.name : "none"
+    }, Ring: ${ring ? ring.name : "none"}`,
+    500,
+    (MAP_HEIGHT + 1) * tileSize()
+  );
+  ctx.fillText(
+    `STR: ${player.stats.str} / ${player.stats.modified.str}`,
+    0,
+    (MAP_HEIGHT + 2) * tileSize()
+  );
+  ctx.fillText(
+    `DEF: ${player.stats.def} / ${player.stats.modified.def}`,
+    0,
+    (MAP_HEIGHT + 3) * tileSize()
+  );
+}
+
 function drawGameAscii(
   { floor, actors, player, surface: { canvas, ctx }, debugMap },
   glyphAtlas
@@ -64,29 +100,8 @@ function drawGameAscii(
       }
     })
   );
-  ctx.fillStyle = "#2378cc";
-  ctx.fillText(
-    `HP: ${player.stats.hp} / ${player.stats.maxHp}`,
-    0,
-    (MAP_HEIGHT - 1) * tileSize()
-  );
-  ctx.fillText(
-    `Backpack: ${player.inventory.backpack
-      .map((item) => (item ? item.name : ""))
-      .toString()
-      .split(",")
-      .join(", ")}`,
-    200,
-    (MAP_HEIGHT - 1) * tileSize()
-  );
-  const { weapon, armor, ring } = player.inventory.equipment;
-  ctx.fillText(
-    `Weapon: ${weapon ? weapon.name : "none"}, Armor: ${
-      armor ? armor.name : "none"
-    }, Ring: ${ring ? ring.name : "none"}`,
-    500,
-    (MAP_HEIGHT - 1) * tileSize()
-  );
+
+  drawStats(player, ctx);
 }
 
 export const drawGame = drawGameAscii;

@@ -5,7 +5,7 @@ export default [
     name: "player",
     range: 5,
     hp: 5,
-    attack: 2,
+    str: 2,
   },
   {
     color: "#f80",
@@ -13,7 +13,7 @@ export default [
     name: "goblin",
     range: 20,
     hp: 1,
-    attack: 1,
+    str: 1,
   },
 
   {
@@ -22,6 +22,6 @@ export default [
     name: "kobold",
     range: 15,
     hp: 3,
-    attack: 2,
+    str: 2,
   },
 ];

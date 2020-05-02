@@ -1,6 +1,7 @@
 export const MAP_WIDTH = 80;
 export const MAP_HEIGHT = 50;
-export const SCREEN_HEIGHT = 50;
+export const SCREEN_WIDTH = MAP_WIDTH + 5;
+export const SCREEN_HEIGHT = MAP_HEIGHT + 10;
 export const FOG_UNEXPLORED = 0;
 export const FOG_VISIBLE = 1;
 export const FOG_EXPLORED = 2;

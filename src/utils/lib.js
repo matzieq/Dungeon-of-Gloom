@@ -1,4 +1,9 @@
-import { MAP_WIDTH, MAP_HEIGHT } from "./constants.js";
+import {
+  MAP_WIDTH,
+  MAP_HEIGHT,
+  SCREEN_HEIGHT,
+  SCREEN_WIDTH,
+} from "./constants.js";
 
 export const range = (length) => [...Array(length).keys()];
 export const getRandomElement = (arr) =>
@@ -53,7 +58,10 @@ export function lineOfSight(pos1, pos2, state) {
 }
 
 export const tileSize = () =>
-  Math.min(window.innerWidth / MAP_WIDTH, window.innerHeight / MAP_HEIGHT);
+  Math.min(
+    window.innerWidth / SCREEN_WIDTH,
+    window.innerHeight / SCREEN_HEIGHT
+  );
 
 export const copyCollection = (collection) =>
   collection.map((item) => ({ ...item }));

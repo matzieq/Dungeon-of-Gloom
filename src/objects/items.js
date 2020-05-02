@@ -32,7 +32,7 @@ export const Inventory = () => ({
     this.backpack = this.backpack.filter((_, index) => index !== atIndex);
     return removedItem;
   },
-  equip(atIndex) {
+  equip(atIndex, actor) {
     if (!this.backpack[atIndex] || !this.backpack[atIndex].isEquippable) {
       return false;
     }
@@ -43,5 +43,19 @@ export const Inventory = () => ({
 
     this.equipment[slot] = { ...this.backpack[atIndex] };
     this.backpack[atIndex] = unequippedItem ? { ...unequippedItem } : null;
+
+    updateStats(actor);
   },
 });
+
+export function updateStats(actor) {
+  actor.stats.modified = { str: actor.stats.str, def: actor.stats.def };
+
+  const { equipment } = actor.inventory;
+  Object.values(equipment).forEach((eq) => {
+    eq &&
+      eq.effects.forEach((effect) => {
+        actor.stats.modified[effect.what] += effect.by;
+      });
+  });
+}

@@ -1,7 +1,6 @@
 import { distanceMap } from "../map/index.js";
 import { distanceBetween, lineOfSight } from "../utils/lib.js";
 import {
-  directions,
   directionsWithDiagonals,
   FOG_EXPLORED,
   FOG_UNEXPLORED,
@@ -34,7 +33,7 @@ function moveActor(actor, state, dir) {
 function attack(attacker, defender, state) {
   console.log(attacker);
   console.log(defender);
-  defender.stats.hp -= attacker.stats.attack;
+  defender.stats.hp -= attacker.stats.str;
   if (defender.stats.hp <= 0) {
     defender.alive = false;
     defender.name = "dead";
@@ -44,17 +43,37 @@ function attack(attacker, defender, state) {
 function handleKeys(e) {
   const dir = { x: 0, y: 0 };
 
-  switch (e.which) {
-    case 37:
+  switch (e.key) {
+    case "ArrowLeft":
+    case "h":
       dir.x = -1;
       break;
-    case 38:
+    case "ArrowUp":
+    case "k":
       dir.y = -1;
       break;
-    case 39:
+    case "ArrowRight":
+    case "l":
       dir.x = 1;
       break;
-    case 40:
+    case "ArrowDown":
+    case "j":
+      dir.y = 1;
+      break;
+    case "u":
+      dir.x = -1;
+      dir.y = -1;
+      break;
+    case "i":
+      dir.x = 1;
+      dir.y = -1;
+      break;
+    case "b":
+      dir.x = -1;
+      dir.y = 1;
+      break;
+    case "n":
+      dir.x = 1;
       dir.y = 1;
       break;
   }
@@ -78,15 +97,10 @@ export function update(e, state) {
 }
 
 export function unfog(state) {
-  console.log("Fired");
   const { floor, player, debugMap } = state;
-  // console.log(player.pos);
-  // floor[player.pos.y][player.pos.x].flags.fog = 1;
   floor.forEach((row, y) => {
-    // debugMap[y] = [];
     row.forEach((tile, x) => {
       if (tile.flags.fog === FOG_VISIBLE) {
-        // debugMap[y][x] = "O";
         unfogTileSimple(tile, FOG_EXPLORED);
       }
     });
@@ -113,7 +127,7 @@ export function unfogTile(x, y, fogValue, tile, state) {
     directionsWithDiagonals.forEach((dir) => {
       const tx = x + dir.x;
       const ty = y + dir.y;
-      const { floor, player } = state;
+      const { floor } = state;
       const neighbouringTile = floor[ty] ? floor[ty][tx] : null;
 
       if (neighbouringTile && !neighbouringTile.flags.walkable) {

@@ -1,12 +1,16 @@
-const Statblock = ({ range, hp, attack, defense, level, xp }) => ({
+const Statblock = ({ range, hp, str, def, level, xp }) => ({
   range,
   hp,
   maxHp: hp,
-  attack,
-  defense,
+  str,
+  def,
   level,
   xp,
   currentXp: 0,
+  modified: {
+    str,
+    def,
+  },
 });
 
 export default Statblock;

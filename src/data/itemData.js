@@ -16,11 +16,13 @@ export default [
   {
     name: "sword",
     type: WEAPON,
-    effects: {
-      type: INCREASE,
-      what: "str",
-      by: 2,
-    },
+    effects: [
+      {
+        type: INCREASE,
+        what: "str",
+        by: 2,
+      },
+    ],
   },
   {
     name: "leather armor",

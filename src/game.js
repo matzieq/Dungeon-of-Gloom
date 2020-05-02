@@ -3,7 +3,7 @@ import { drawGame } from "./draw/index.js";
 import { update, unfog } from "./update/index.js";
 import Actor from "./objects/actor.js";
 
-import { MAP_WIDTH, MAP_HEIGHT } from "./utils/constants.js";
+import { SCREEN_WIDTH, SCREEN_HEIGHT } from "./utils/constants.js";
 
 import gameData from "./data/gameData.js";
 import { Item } from "./objects/items.js";
@@ -23,7 +23,7 @@ const player = Actor({
   y: 5,
   range: 20,
   hp: 5,
-  attack: 2,
+  str: 2,
 });
 const monster = Actor({
   color: "#f80",
@@ -33,7 +33,7 @@ const monster = Actor({
   y: 30,
   range: 20,
   hp: 1,
-  attack: 1,
+  str: 1,
 });
 
 const monster2 = Actor({
@@ -44,10 +44,10 @@ const monster2 = Actor({
   y: 15,
   range: 15,
   hp: 3,
-  attack: 2,
+  str: 2,
 });
 
-const dagger = Item(gameData.itemData.find((item) => item.name === "dagger"));
+const dagger = Item(gameData.itemData.find((item) => item.name === "sword"));
 const armor = Item(
   gameData.itemData.find((item) => item.name === "leather armor")
 );
@@ -55,7 +55,8 @@ console.log(dagger);
 
 player.inventory.take(dagger);
 player.inventory.take(armor);
-player.inventory.equip(0);
+player.inventory.equip(0, player);
+player.inventory.equip(1, player);
 // player.inventory.equip(0);
 
 const actors = [monster, monster2, player];
@@ -67,9 +68,9 @@ const { glyphAtlas } = gameData;
 const resizeGame = () => {
   ctx.font = `${tileSize()}px Source Code Pro`;
 
-  canvas.width = MAP_WIDTH * tileSize();
-  canvas.height = MAP_HEIGHT * tileSize();
-  canvas.style.width = `${MAP_WIDTH * tileSize()}px`;
+  canvas.width = SCREEN_WIDTH * tileSize();
+  canvas.height = SCREEN_HEIGHT * tileSize();
+  canvas.style.width = `${SCREEN_WIDTH * tileSize()}px`;
   drawGame(state, glyphAtlas);
 };
 
