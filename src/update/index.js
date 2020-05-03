@@ -7,6 +7,8 @@ import {
   FOG_VISIBLE,
 } from "../utils/constants.js";
 
+import { GAME_STATE, MENU_STATE } from "../utils/states.js";
+
 function moveActor(actor, state, dir) {
   if (!dir) return;
   const { x: dx, y: dy } = dir;
@@ -33,7 +35,7 @@ function moveActor(actor, state, dir) {
 function attack(attacker, defender, state) {
   console.log(attacker);
   console.log(defender);
-  defender.stats.hp -= attacker.stats.str;
+  defender.stats.hp -= attacker.stats.modified.str;
   if (defender.stats.hp <= 0) {
     defender.alive = false;
     defender.name = "dead";
@@ -41,7 +43,7 @@ function attack(attacker, defender, state) {
 }
 
 function handleKeys(e) {
-  const dir = { x: 0, y: 0 };
+  const dir = { x: 0, y: 0, ok: false, cancel: false };
 
   switch (e.key) {
     case "ArrowLeft":
@@ -76,16 +78,27 @@ function handleKeys(e) {
       dir.x = 1;
       dir.y = 1;
       break;
+    case "x":
+      dir.ok = true;
+      break;
+    case "z":
+      dir.cancel = true;
+      break;
   }
 
   return { dir };
 }
 
-export function update(e, state) {
+export const update = { gameState, menuState };
+
+export function gameState(e, state) {
   const { player, floor, actors } = state;
 
-  const { dir } = e ? handleKeys(e) : { x: 0, y: 0 };
-
+  const { dir } = e ? handleKeys(e) : { x: 0, y: 0, ok: false, cancel: false };
+  if (dir.ok) {
+    state.playState = MENU_STATE;
+    return;
+  }
   moveActor(player, state, dir);
   unfog(state);
   state.distMap = distanceMap({ floor, actor: player });
@@ -94,6 +107,17 @@ export function update(e, state) {
       moveActor(actor, state, actor.ai(state));
     }
   });
+}
+
+export function menuState(e, state) {
+  const {
+    dir: { y, ok, cancel },
+  } = e ? handleKeys(e) : { x: 0, y: 0 };
+  console.log(y);
+  if (cancel) {
+    state.playState = GAME_STATE;
+    return;
+  }
 }
 
 export function unfog(state) {

@@ -57,11 +57,19 @@ player.inventory.take(dagger);
 player.inventory.take(armor);
 player.inventory.equip(0, player);
 player.inventory.equip(1, player);
+player.inventory.take(dagger);
 // player.inventory.equip(0);
 
 const actors = [monster, monster2, player];
 
-const state = { floor, actors, player, surface: { canvas, ctx }, debugMap: [] };
+const state = {
+  floor,
+  actors,
+  player,
+  surface: { canvas, ctx },
+  debugMap: [],
+  playState: "gameState",
+};
 
 const { glyphAtlas } = gameData;
 
@@ -71,19 +79,19 @@ const resizeGame = () => {
   canvas.width = SCREEN_WIDTH * tileSize();
   canvas.height = SCREEN_HEIGHT * tileSize();
   canvas.style.width = `${SCREEN_WIDTH * tileSize()}px`;
-  drawGame(state, glyphAtlas);
+  drawGame[state.playState](state, glyphAtlas);
 };
 
 unfog(state);
 
 resizeGame();
 setInterval(() => {
-  drawGame(state, glyphAtlas);
+  drawGame[state.playState](state, glyphAtlas);
 }, 100);
 
 document.addEventListener("keydown", (e) => {
-  update(e, state);
-  drawGame(state, glyphAtlas);
+  update[state.playState](e, state);
+  drawGame[state.playState](state, glyphAtlas);
 });
 
 window.addEventListener("resize", resizeGame);

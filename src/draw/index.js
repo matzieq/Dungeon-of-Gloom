@@ -1,4 +1,10 @@
-import { FOG_EXPLORED, FOG_VISIBLE, MAP_HEIGHT } from "../utils/constants.js";
+import {
+  FOG_EXPLORED,
+  FOG_VISIBLE,
+  MAP_HEIGHT,
+  MAP_WIDTH,
+  BACKPACK_LIMIT,
+} from "../utils/constants.js";
 
 import { tileSize } from "../utils/lib.js";
 
@@ -31,47 +37,77 @@ function setupScreen(canvas, ctx) {
   setupFont(ctx);
 }
 
-function drawStats(player, ctx) {
+function drawStatsAscii(player, ctx) {
   ctx.fillStyle = "#2378cc";
   ctx.fillText(
     `HP: ${player.stats.hp} / ${player.stats.maxHp}`,
-    0,
-    (MAP_HEIGHT + 1) * tileSize()
+    (MAP_WIDTH - 10) * tileSize(),
+    (11 + BACKPACK_LIMIT) * tileSize()
   );
-  ctx.fillText(
-    `Backpack: ${player.inventory.backpack
-      .map((item) => (item ? item.name : ""))
-      .toString()
-      .split(",")
-      .join(", ")}`,
-    200,
-    (MAP_HEIGHT + 1) * tileSize()
-  );
-  const { weapon, armor, ring } = player.inventory.equipment;
-  ctx.fillText(
-    `Weapon: ${weapon ? weapon.name : "none"}, Armor: ${
-      armor ? armor.name : "none"
-    }, Ring: ${ring ? ring.name : "none"}`,
-    500,
-    (MAP_HEIGHT + 1) * tileSize()
-  );
+
   ctx.fillText(
     `STR: ${player.stats.str} / ${player.stats.modified.str}`,
-    0,
-    (MAP_HEIGHT + 2) * tileSize()
+    (MAP_WIDTH - 10) * tileSize(),
+    (12 + BACKPACK_LIMIT) * tileSize()
   );
   ctx.fillText(
     `DEF: ${player.stats.def} / ${player.stats.modified.def}`,
-    0,
-    (MAP_HEIGHT + 3) * tileSize()
+    (MAP_WIDTH - 10) * tileSize(),
+    (13 + BACKPACK_LIMIT) * tileSize()
+  );
+  const { equipment } = player.inventory;
+  Object.keys(equipment).forEach((eqType, index) => {
+    drawEquipmentPieceAscii(
+      eqType.toUpperCase(),
+      equipment[eqType] ? equipment[eqType].name : "none",
+      index,
+      ctx
+    );
+  });
+  ctx.fillStyle = "#ee7744";
+
+  ctx.fillText(`Backpack:`, (MAP_WIDTH - 10) * tileSize(), 9 * tileSize());
+  const inventory = player.inventory.backpack
+    .map((item) => (item ? item.name : ""))
+    .filter((item) => item !== "");
+
+  inventory.forEach((item, index) => {
+    drawInventoryPieceAscii(item, index, ctx);
+  });
+}
+
+function drawEquipmentPieceAscii(type, name, posY, ctx) {
+  ctx.fillStyle = "#2378cc";
+
+  ctx.fillText(
+    `${type}:`,
+    (MAP_WIDTH - 10) * tileSize(),
+    (5 + posY) * tileSize()
+  );
+
+  ctx.fillStyle = "#feef23";
+  ctx.fillText(
+    `${name}`,
+    (MAP_WIDTH - 5) * tileSize(),
+    (5 + posY) * tileSize()
   );
 }
 
-function drawGameAscii(
-  { floor, actors, player, surface: { canvas, ctx }, debugMap },
-  glyphAtlas
-) {
-  setupScreen(canvas, ctx);
+function drawInventoryPieceAscii(name, posY, ctx) {
+  ctx.fillStyle = "#feef23";
+
+  ctx.fillText(
+    `${name}`,
+    (MAP_WIDTH - 10) * tileSize(),
+    (10 + posY) * tileSize()
+  );
+}
+
+function drawCursorAscii({ player, surface: { ctx } }) {
+  ctx.fillText(`MENUSTATE`, 0, (MAP_HEIGHT + 4) * tileSize());
+}
+
+function drawMapAscii({ floor, actors, debugMap, ctx, glyphAtlas }) {
   mapWithActors(floor, actors).forEach((row, y) =>
     row.forEach((tile, x) => {
       const { glyph, color } = glyphAtlas.find((el) => el.name === tile.name);
@@ -100,8 +136,22 @@ function drawGameAscii(
       }
     })
   );
-
-  drawStats(player, ctx);
 }
 
-export const drawGame = drawGameAscii;
+function drawMapAndStatsAscii(
+  { floor, actors, player, surface: { canvas, ctx }, debugMap },
+  glyphAtlas
+) {
+  setupScreen(canvas, ctx);
+  drawMapAscii({ floor, actors, ctx, debugMap, glyphAtlas });
+  drawStatsAscii(player, ctx);
+}
+
+const drawGameAscii = drawMapAndStatsAscii;
+
+function drawMenuAscii(state, glyphAtlas) {
+  drawMapAndStatsAscii(state, glyphAtlas);
+  drawCursorAscii(state);
+}
+
+export const drawGame = { gameState: drawGameAscii, menuState: drawMenuAscii };
