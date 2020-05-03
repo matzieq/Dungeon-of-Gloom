@@ -42,7 +42,11 @@ export const Inventory = () => ({
     const unequippedItem = this.equipment[slot];
 
     this.equipment[slot] = { ...this.backpack[atIndex] };
-    this.backpack[atIndex] = unequippedItem ? { ...unequippedItem } : null;
+    if (unequippedItem) {
+      this.backpack[atIndex] = { ...unequippedItem };
+    } else {
+      this.backpack = this.backpack.filter((item, index) => index !== atIndex);
+    }
 
     updateStats(actor);
   },

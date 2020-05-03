@@ -113,7 +113,11 @@ export function menuState(e, state) {
   const {
     dir: { y, ok, cancel },
   } = e ? handleKeys(e) : { x: 0, y: 0 };
-  console.log(y);
+
+  state.menu.cursorPos = Math.min(
+    Math.max(0, state.menu.cursorPos + y),
+    state.player.inventory.backpack.length + 2
+  );
   if (cancel) {
     state.playState = GAME_STATE;
     return;

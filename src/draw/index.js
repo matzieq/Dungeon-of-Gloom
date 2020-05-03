@@ -103,8 +103,16 @@ function drawInventoryPieceAscii(name, posY, ctx) {
   );
 }
 
-function drawCursorAscii({ player, surface: { ctx } }) {
-  ctx.fillText(`MENUSTATE`, 0, (MAP_HEIGHT + 4) * tileSize());
+function drawCursorAscii({ player, surface: { ctx }, menu: { cursorPos } }) {
+  ctx.fillStyle = "#ef78cc";
+  ctx.fillText("Select item", (MAP_WIDTH - 10) * tileSize(), 3 * tileSize());
+  ctx.fillStyle = "#ef78cc";
+  const cursorHeight = cursorPos <= 2 ? cursorPos : cursorPos + 2;
+  ctx.fillText(
+    ">",
+    (MAP_WIDTH - 11) * tileSize(),
+    (5 + cursorHeight) * tileSize()
+  );
 }
 
 function drawMapAscii({ floor, actors, debugMap, ctx, glyphAtlas }) {

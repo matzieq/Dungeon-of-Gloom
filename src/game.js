@@ -56,7 +56,7 @@ console.log(dagger);
 player.inventory.take(dagger);
 player.inventory.take(armor);
 player.inventory.equip(0, player);
-player.inventory.equip(1, player);
+player.inventory.equip(0, player);
 player.inventory.take(dagger);
 // player.inventory.equip(0);
 
@@ -69,6 +69,9 @@ const state = {
   surface: { canvas, ctx },
   debugMap: [],
   playState: "gameState",
+  menu: {
+    cursorPos: 0,
+  },
 };
 
 const { glyphAtlas } = gameData;
