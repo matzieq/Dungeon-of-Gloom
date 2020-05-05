@@ -3,7 +3,13 @@ import { drawGame } from "./draw/index.js";
 import { update, unfog } from "./update/index.js";
 import Actor from "./objects/actor.js";
 
-import { SCREEN_WIDTH, SCREEN_HEIGHT } from "./utils/constants.js";
+import {
+  SCREEN_WIDTH,
+  SCREEN_HEIGHT,
+  OPTION_BACK,
+  OPTION_DISCARD,
+  OPTION_USE,
+} from "./utils/constants.js";
 
 import gameData from "./data/gameData.js";
 import { Item } from "./objects/items.js";
@@ -47,7 +53,8 @@ const monster2 = Actor({
   str: 2,
 });
 
-const dagger = Item(gameData.itemData.find((item) => item.name === "sword"));
+const dagger = Item(gameData.itemData.find((item) => item.name === "dagger"));
+const sword = Item(gameData.itemData.find((item) => item.name === "sword"));
 const armor = Item(
   gameData.itemData.find((item) => item.name === "leather armor")
 );
@@ -55,10 +62,7 @@ console.log(dagger);
 
 player.inventory.take(dagger);
 player.inventory.take(armor);
-player.inventory.equip(0, player);
-player.inventory.equip(0, player);
-player.inventory.take(dagger);
-// player.inventory.equip(0);
+player.inventory.take(sword);
 
 const actors = [monster, monster2, player];
 
@@ -71,6 +75,12 @@ const state = {
   playState: "gameState",
   menu: {
     cursorPos: 0,
+    selectedItem: null,
+    subMenu: {
+      open: false,
+      cursorPos: 0,
+      options: [OPTION_USE, OPTION_DISCARD, OPTION_BACK],
+    },
   },
 };
 

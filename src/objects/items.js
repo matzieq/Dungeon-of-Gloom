@@ -11,11 +11,7 @@ export const Item = ({ name, type, effects }) => ({
 
 export const Inventory = () => ({
   backpack: [],
-  equipment: {
-    weapon: null,
-    armor: null,
-    ring: null,
-  },
+  equipment: [null, null, null],
   take(item) {
     if (this.backpack.length >= BACKPACK_LIMIT) {
       return false;
@@ -42,6 +38,7 @@ export const Inventory = () => ({
     const unequippedItem = this.equipment[slot];
 
     this.equipment[slot] = { ...this.backpack[atIndex] };
+
     if (unequippedItem) {
       this.backpack[atIndex] = { ...unequippedItem };
     } else {

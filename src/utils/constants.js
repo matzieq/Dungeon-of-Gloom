@@ -25,3 +25,9 @@ export const directionsWithDiagonals = [
 ];
 
 export const BACKPACK_LIMIT = 10;
+
+export const OPTION_USE = "Use";
+export const OPTION_DISCARD = "Discard";
+export const OPTION_BACK = "Back";
+
+export const OPTION_TEXTS = ["Use", "Discard", "Back"];

@@ -65,3 +65,21 @@ export const tileSize = () =>
 
 export const copyCollection = (collection) =>
   collection.map((item) => ({ ...item }));
+
+export function deepCopy(inObject) {
+  let outObject, value, key;
+
+  if (typeof inObject !== "object" || inObject === null) {
+    return inObject;
+  }
+
+  outObject = Array.isArray(inObject) ? [] : {};
+
+  for (key in inObject) {
+    value = inObject[key];
+
+    outObject[key] = deepCopy(value);
+  }
+
+  return outObject;
+}

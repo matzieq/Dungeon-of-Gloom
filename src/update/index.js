@@ -113,14 +113,63 @@ export function menuState(e, state) {
   const {
     dir: { y, ok, cancel },
   } = e ? handleKeys(e) : { x: 0, y: 0 };
+  const {
+    player,
+    player: {
+      inventory: { backpack, equipment },
+    },
+    menu,
+  } = state;
+  if (menu.subMenu.open) {
+    menu.subMenu.cursorPos = Math.min(
+      Math.max(0, menu.subMenu.cursorPos + y),
+      2
+    );
+  } else {
+    menu.cursorPos = Math.min(
+      Math.max(0, state.menu.cursorPos + y),
+      backpack.length + 2
+    );
+  }
+  if (ok) {
+    if (menu.subMenu.open) {
+      console.log(state.menu.subMenu.cursorPos);
+      const { cursorPos } = state.menu;
+      const isEquipmentSelected = cursorPos <= 2;
+      const isItemEquippable =
+        cursorPos > 2 && backpack[cursorPos - 3].isEquippable;
 
-  state.menu.cursorPos = Math.min(
-    Math.max(0, state.menu.cursorPos + y),
-    state.player.inventory.backpack.length + 2
-  );
+      switch (menu.subMenu.cursorPos) {
+        case 0:
+          if (isItemEquippable) {
+            player.inventory.equip(cursorPos - 3, state.player);
+            menu.subMenu.open = false;
+            menu.cursorPos = 0;
+          }
+          break;
+        case 1:
+          if (!isEquipmentSelected) {
+            player.inventory.remove(cursorPos - 3);
+            menu.subMenu.open = false;
+            menu.cursorPos = 0;
+          }
+          break;
+        case 2:
+          menu.subMenu.open = false;
+          break;
+      }
+    } else {
+      menu.selectedItem = menu.cursorPos;
+      menu.subMenu.open = true;
+    }
+  }
   if (cancel) {
-    state.playState = GAME_STATE;
-    return;
+    if (menu.subMenu.open) {
+      menu.subMenu.open = false;
+    } else {
+      state.playState = GAME_STATE;
+      return;
+    }
   }
 }
 
