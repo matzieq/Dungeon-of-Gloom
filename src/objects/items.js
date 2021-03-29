@@ -1,4 +1,4 @@
-import { copyCollection } from "../utils/lib.js";
+import { copyCollection, deepCopy } from "../utils/lib.js";
 import { EQUIPPABLE } from "../utils/itemTypes.js";
 import { BACKPACK_LIMIT } from "../utils/constants.js";
 
@@ -6,7 +6,7 @@ export const Item = ({ name, type, effects }) => ({
   name,
   type,
   isEquippable: EQUIPPABLE.includes(type),
-  effects: copyCollection(effects),
+  effects: deepCopy(effects),
 });
 
 export const Inventory = () => ({

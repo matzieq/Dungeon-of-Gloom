@@ -31,3 +31,6 @@ export const OPTION_DISCARD = "Discard";
 export const OPTION_BACK = "Back";
 
 export const OPTION_TEXTS = ["Use", "Discard", "Back"];
+
+export const MIN_ROOM_SIZE = 2;
+export const MAX_ROOM_SIZE = 10;
